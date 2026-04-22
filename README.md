@@ -1,3 +1,4 @@
+Dueño: Paulo Santos
 # EcommerceEmp - Tienda de Música
 
 Aplicación de ecommerce completa desarrollada con Django REST Framework y React que permite gestionar inventarios de álbumes musicales con carrito de compras funcional.

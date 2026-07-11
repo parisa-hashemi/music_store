@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './UserProfile.css';
-
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const UserProfile = ({ onVolver }) => {
   const [user, setUser] = useState(null);
   const [userStats, setUserStats] = useState(null);
@@ -22,7 +22,7 @@ const UserProfile = ({ onVolver }) => {
         }
 
         // Fetch purchase stats from the API
-        const response = await fetch('http://localhost:8000/api/user/stats/', {
+        const response = await fetch(`${API_URL}/api/user/stats/`, {
           credentials: 'include'
         });
         if (response.ok) {
@@ -50,7 +50,7 @@ const UserProfile = ({ onVolver }) => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/user/profile/', {
+      const response = await fetch(`${API_URL}/api/user/profile/`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

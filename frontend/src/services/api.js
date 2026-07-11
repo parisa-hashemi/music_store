@@ -1,4 +1,5 @@
-const API_BASE = 'http://localhost:8000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE = `${API_URL}/api`;
 
 // Productos
 export const fetchProductos = async (categoriaId = null) => {

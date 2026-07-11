@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 function Comments({ albumId }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -10,7 +10,7 @@ function Comments({ albumId }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/auth/check/', {
+        const response = await fetch(`${API_URL}/api/auth/check/`, {
           credentials: 'include'  // Important: send the cookie with the request
         });
         setIsLoggedIn(response.ok);
@@ -27,7 +27,7 @@ function Comments({ albumId }) {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/albums/${albumId}/comments/`, {
+      const response = await fetch(`${API_URL}/api/albums/${albumId}/comments/`, {
         credentials: 'include'  // Important: send the cookie with the request
       });
       if (response.ok) {
@@ -50,7 +50,7 @@ function Comments({ albumId }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/albums/${albumId}/comments/`, {
+      const response = await fetch(`${API_URL}/api/albums/${albumId}/comments/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

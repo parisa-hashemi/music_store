@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { registrarUsuario, loginUsuario, logoutUsuario, fetchHistorialCompras } from '../services/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export const useRegistro = () => {
   return useMutation({
@@ -73,7 +74,7 @@ export const useUserProfile = () => {
   return useQuery({
     queryKey: ['userProfile'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:8000/api/user/profile/', {
+      const response = await fetch(`${API_URL}/api/user/profile/`, {
         credentials: 'include',
       });
       if (!response.ok) throw new Error('Error fetching profile');

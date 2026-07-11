@@ -4,6 +4,9 @@ import { useAgregarAlCarrito } from '../hooks/useCarrito';
 import { useUserProfile } from '../hooks/useAuth';
 import './Home.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
+
 const DURACION_PREVIEW_MS = 28000; // ~28s: most preview_urls are full songs
 
 const PLACEHOLDER_COVER = `data:image/svg+xml,${encodeURIComponent(

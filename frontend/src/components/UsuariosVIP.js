@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './UsuariosVIP.css';
-
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const UsuariosVIP = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/usuarios-vip/', {
+    fetch(`${API_URL}/api/usuarios-vip/`, {
       credentials: 'include'
     })
       .then(res => res.json())

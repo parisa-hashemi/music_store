@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Inventario.css';
 import HistorialCompras from './HistorialCompras';
 import UsuariosVIP from './UsuariosVIP';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 class Inventario extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class Inventario extends Component {
   }
 
   cargarProductos = () => {
-    fetch('http://localhost:8000/api/albums/', {
+    fetch(`${API_URL}/api/albums/`, {
       credentials: 'include'
     })
       .then(res => res.json())
@@ -41,7 +42,7 @@ class Inventario extends Component {
   };
 
   actualizarStock = (id, nuevoStock) => {
-    fetch(`http://localhost:8000/api/albums/${id}/`, {
+    fetch(`${API_URL}/api/albums/${id}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

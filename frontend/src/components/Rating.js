@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 function Rating({ albumId, initialRating = 0, onRatingChange }) {
   const [rating, setRating] = useState(initialRating);
@@ -11,7 +12,7 @@ function Rating({ albumId, initialRating = 0, onRatingChange }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/auth/check/', {
+        const response = await fetch(`${API_URL}/api/auth/check/`, {
           credentials: 'include'
         });
         setIsLoggedIn(response.ok);
@@ -26,7 +27,7 @@ function Rating({ albumId, initialRating = 0, onRatingChange }) {
   useEffect(() => {
     const fetchRating = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/albums/${albumId}/rating/`, {
+        const response = await fetch(`${API_URL}/api/albums/${albumId}/rating/`, {
           credentials: 'include'
         });
         if (response.ok) {
@@ -50,7 +51,7 @@ function Rating({ albumId, initialRating = 0, onRatingChange }) {
     setRating(value);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/albums/${albumId}/rate/`, {
+      const response = await fetch(`${API_URL}/api/albums/${albumId}/rate/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

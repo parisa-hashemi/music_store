@@ -14,12 +14,54 @@ export const useAgregarAlCarrito = () => {
   
   return useMutation({
     mutationFn: agregarAlCarrito,
-    // به جای optimistic update، فقط بعد از موفقیت invalidate کن
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['carrito'] });
+    onMutate: async (newItem) => {
+      // Cancelar queries en progreso
+      await queryClient.cancelQueries({ queryKey: ['carrito'] });
+      
+      // Snapshot del estado anterior
+      const previousCarrito = queryClient.getQueryData(['carrito']);
+      
+      // Optimistic update
+      queryClient.setQueryData(['carrito'], (old) => {
+        if (!old) return old;
+        
+        const existingItem = old.items.find(item => item.album.id === newItem.album_id);
+        
+        if (existingItem) {
+          return {
+            ...old,
+            items: old.items.map(item => 
+              item.album.id === newItem.album_id 
+                ? { ...item, cantidad: item.cantidad + newItem.cantidad }
+                : item
+            ),
+            cantidad_total: old.cantidad_total + newItem.cantidad,
+            total: old.total + (newItem.cantidad * 25.99) // precio estimado
+          };
+        } else {
+          return {
+            ...old,
+            items: [...old.items, {
+              id: Date.now(), // ID temporal
+              album: { id: newItem.album_id },
+              cantidad: newItem.cantidad,
+              subtotal: newItem.cantidad * 25.99
+            }],
+            cantidad_total: old.cantidad_total + newItem.cantidad,
+            total: old.total + (newItem.cantidad * 25.99)
+          };
+        }
+      });
+      
+      return { previousCarrito };
     },
-    onError: (error) => {
-      console.error('Error adding to cart:', error);
+    onError: (err, newItem, context) => {
+      // Rollback en caso de error
+      queryClient.setQueryData(['carrito'], context.previousCarrito);
+    },
+    onSettled: () => {
+      // Invalidar y refetch
+      queryClient.invalidateQueries({ queryKey: ['carrito'] });
     },
   });
 };

@@ -26,7 +26,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://music-store-snowy.vercel.app",
-    "https://*.vercel.app",  # Vercel
+     # Vercel
     "https://*.onrender.com",  # Render
 ]
 CORS_ALLOW_CREDENTIALS = True

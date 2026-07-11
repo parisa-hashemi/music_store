@@ -35,7 +35,7 @@ const Carrito = ({ onVolver, onCheckout }) => {
 
   return (
     <div className="carrito">
-      <button onClick={onVolver} className="btn-volver">
+      <button type="button" onClick={onVolver} className="btn-volver">
         ← Back
       </button>
       
@@ -44,7 +44,7 @@ const Carrito = ({ onVolver, onCheckout }) => {
       {items.length === 0 ? (
         <div className="carrito-vacio">
           <p>Your cart is empty</p>
-          <button onClick={onVolver} className="btn-seguir-comprando">
+          <button type="button" onClick={onVolver} className="btn-seguir-comprando">
             Keep Shopping
           </button>
         </div>
@@ -66,6 +66,7 @@ const Carrito = ({ onVolver, onCheckout }) => {
                 
                 <div className="item-controles">
                   <button 
+                    type="button"
                     onClick={() => handleActualizarCantidad(item, item.cantidad - 1)}
                     disabled={item.cantidad <= 1 || actualizarCantidadMutation.isPending}
                     className="btn-cantidad"
@@ -74,6 +75,7 @@ const Carrito = ({ onVolver, onCheckout }) => {
                   </button>
                   <span className="cantidad">{item.cantidad}</span>
                   <button 
+                    type="button"
                     onClick={() => handleActualizarCantidad(item, item.cantidad + 1)}
                     disabled={actualizarCantidadMutation.isPending}
                     className="btn-cantidad"
@@ -81,6 +83,7 @@ const Carrito = ({ onVolver, onCheckout }) => {
                     +
                   </button>
                   <button 
+                    type="button"
                     onClick={() => handleEliminar(item)}
                     disabled={eliminarDelCarritoMutation.isPending}
                     className="btn-eliminar"
@@ -111,6 +114,7 @@ const Carrito = ({ onVolver, onCheckout }) => {
           <div className="carrito-total">
             <h2>Total: ${total}</h2>
             <button
+              type="button"
               className="btn-comprar"
               onClick={onCheckout}
               disabled={items.length === 0}

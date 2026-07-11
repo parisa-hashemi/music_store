@@ -1,49 +1,47 @@
 .categorias {
-  padding: 20px;
+  padding: var(--space-4) var(--space-5) var(--space-7);
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .categorias h1 {
   text-align: center;
-  color: #333;
-  margin-bottom: 30px;
+  margin-bottom: var(--space-5);
 }
 
 .categorias-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px 0;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+  padding: var(--space-4) 0;
 }
 
 .categoria-card {
-  border: 2px solid #ddd;
-  border-radius: 12px;
-  padding: 30px;
-  background: white;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-5);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition);
   position: relative;
   text-align: center;
 }
 
 .categoria-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-  border-color: #007bff;
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-gold);
 }
 
 .categoria-card h3 {
-  color: #333;
-  margin-bottom: 15px;
-  font-size: 1.5em;
+  margin-bottom: var(--space-3);
+  font-size: 1.4rem;
 }
 
 .categoria-card p {
-  color: #666;
-  margin-bottom: 20px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
   line-height: 1.5;
 }
 
@@ -52,22 +50,12 @@
   bottom: 15px;
   right: 20px;
   font-size: 1.5em;
-  color: #007bff;
-  transition: transform 0.3s ease;
+  color: var(--color-gold-dark);
+  transition: transform var(--transition);
 }
 
 .categoria-card:hover .categoria-arrow {
   transform: translateX(5px);
-}
-
-.loading, .error {
-  text-align: center;
-  padding: 40px;
-  font-size: 1.2em;
-}
-
-.error {
-  color: #dc3545;
 }
 
 /* Responsividad */
@@ -75,12 +63,12 @@
   .categorias {
     padding: 10px;
   }
-  
+
   .categorias-grid {
     grid-template-columns: 1fr;
     gap: 15px;
   }
-  
+
   .categoria-card {
     padding: 20px;
   }

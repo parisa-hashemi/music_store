@@ -3,6 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .models import *
+from .models import Rating
 
 class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,10 +12,18 @@ class CategoriaSerializer(serializers.ModelSerializer):
 
 class AlbumSerializer(serializers.ModelSerializer):
     categoria_nombre = serializers.CharField(source='categoria.nombre', read_only=True)
-    
+
     class Meta:
         model = Album
-        fields = ['id', 'title', 'artist', 'rating', 'release_date', 'genre', 'stock', 'precio', 'categoria', 'categoria_nombre']
+        fields = ['id', 'title', 'artist', 'rating', 'release_date', 'genre', 'stock', 'precio', 'categoria', 'categoria_nombre', 'tracks', 'average_rating', 'preview_url', 'cover_image']
+
+    def create(self, validated_data):
+        if not validated_data.get('cover_image'):
+            from .utils import fetch_album_cover
+            cover = fetch_album_cover(validated_data.get('title', ''), validated_data.get('artist', ''))
+            if cover:
+                validated_data['cover_image'] = cover
+        return super().create(validated_data)
 
 class CarritoItemSerializer(serializers.ModelSerializer):
     album = AlbumSerializer(read_only=True)
@@ -49,19 +58,19 @@ class CarritoItemSerializer(serializers.ModelSerializer):
     
     def validate_cantidad(self, value):
         if value <= 0:
-            raise serializers.ValidationError("La cantidad debe ser mayor a 0")
+            raise serializers.ValidationError("Quantity must be greater than 0")
         return value
-    
+
     def validate(self, data):
         album_id = data.get('album_id')
         cantidad = data.get('cantidad', 1)
-        
+
         try:
             album = Album.objects.get(id=album_id)
             if cantidad > album.stock:
-                raise serializers.ValidationError(f"Stock insuficiente. Disponible: {album.stock}")
+                raise serializers.ValidationError(f"Insufficient stock. Available: {album.stock}")
         except Album.DoesNotExist:
-            raise serializers.ValidationError("El álbum no existe")
+            raise serializers.ValidationError("The album does not exist")
         
         return data
 
@@ -75,7 +84,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     
     def validate(self, data):
         if data['password'] != data['password_confirm']:
-            raise serializers.ValidationError("Las contraseñas no coinciden")
+            raise serializers.ValidationError("Passwords do not match")
         return data
     
     def create(self, validated_data):
@@ -92,14 +101,14 @@ class UserLoginSerializer(serializers.Serializer):
         password = data.get('password')
         
         if not username or not password:
-            raise serializers.ValidationError("Username y password son requeridos")
-            
+            raise serializers.ValidationError("Username and password are required")
+
         user = authenticate(username=username, password=password)
         if not user:
-            raise serializers.ValidationError("Credenciales inválidas")
-        
+            raise serializers.ValidationError("Invalid credentials")
+
         if not user.is_active:
-            raise serializers.ValidationError("Usuario inactivo")
+            raise serializers.ValidationError("Inactive user")
             
         data['user'] = user
         return data
@@ -140,3 +149,21 @@ class UserProfileSerializer(serializers.ModelSerializer):
             return usuario.VIP
         except Usuario.DoesNotExist:
             return False
+    
+class CommentSerializer(serializers.ModelSerializer):
+    user_name = serializers.ReadOnlyField(source='user.username')
+    
+    class Meta:
+        model = Comment
+        fields = ['id', 'album', 'user_name', 'body', 'created_at']
+        read_only_fields = ['id', 'user_name', 'created_at', 'album']
+
+
+
+class RatingSerializer(serializers.ModelSerializer):
+    user_name = serializers.ReadOnlyField(source='user.username')
+    
+    class Meta:
+        model = Rating
+        fields = ['id', 'album', 'user_name', 'score', 'created_at']
+        read_only_fields = ['id', 'user_name', 'created_at', 'album']

@@ -64,16 +64,16 @@ class Inventario extends Component {
   };
 
   obtenerEstadoStock = (stock) => {
-    if (stock === 0) return { clase: 'sin-stock', texto: 'Sin Stock' };
-    if (stock < 5) return { clase: 'stock-bajo', texto: 'Stock Bajo' };
-    if (stock < 20) return { clase: 'stock-medio', texto: 'Stock Medio' };
-    return { clase: 'stock-alto', texto: 'Stock Alto' };
+    if (stock === 0) return { clase: 'sin-stock', texto: 'Out of Stock' };
+    if (stock < 5) return { clase: 'stock-bajo', texto: 'Low Stock' };
+    if (stock < 20) return { clase: 'stock-medio', texto: 'Medium Stock' };
+    return { clase: 'stock-alto', texto: 'High Stock' };
   };
 
   render() {
     const { productos, loading, tabActiva } = this.state;
 
-    if (loading && tabActiva === 'inventario') return <p>Cargando inventario...</p>;
+    if (loading && tabActiva === 'inventario') return <p>Loading inventory...</p>;
 
     const totalProductos = productos.length;
     const sinStock = productos.filter(p => p.stock === 0).length;
@@ -82,56 +82,56 @@ class Inventario extends Component {
     return (
       <div className="inventario">
         <button onClick={this.props.onVolver} className="btn-volver">
-          ← Volver
+          ← Back
         </button>
-        
+
         <div className="admin-header">
-          <h1>📦 Panel de Administración</h1>
-          <a 
-            href="http://127.0.0.1:8000/admin/" 
-            target="_blank" 
+          <h1>📦 Admin Panel</h1>
+          <a
+            href="http://127.0.0.1:8000/admin/"
+            target="_blank"
             rel="noopener noreferrer"
             className="btn-consola"
           >
-            🖥️ Ir a Consola
+            🖥️ Go to Console
           </a>
         </div>
-        
+
         <div className="tabs">
-          <button 
+          <button
             className={`tab ${tabActiva === 'inventario' ? 'active' : ''}`}
             onClick={() => this.setState({ tabActiva: 'inventario' })}
           >
-            📦 Inventario
+            📦 Inventory
           </button>
-          <button 
+          <button
             className={`tab ${tabActiva === 'historial' ? 'active' : ''}`}
             onClick={() => this.setState({ tabActiva: 'historial' })}
           >
-            📋 Historial de Compras
+            📋 Purchase History
           </button>
-          <button 
+          <button
             className={`tab ${tabActiva === 'vip' ? 'active' : ''}`}
             onClick={() => this.setState({ tabActiva: 'vip' })}
           >
-            ✨ Usuarios VIP
+            ✨ VIP Users
           </button>
         </div>
-        
+
         {tabActiva === 'inventario' && (
           <>
         <div className="resumen-inventario">
           <div className="stat-card">
             <h3>{totalProductos}</h3>
-            <p>Total Productos</p>
+            <p>Total Products</p>
           </div>
           <div className="stat-card alerta">
             <h3>{sinStock}</h3>
-            <p>Sin Stock</p>
+            <p>Out of Stock</p>
           </div>
           <div className="stat-card warning">
             <h3>{stockBajo}</h3>
-            <p>Stock Bajo</p>
+            <p>Low Stock</p>
           </div>
         </div>
 
@@ -139,14 +139,14 @@ class Inventario extends Component {
           <table>
             <thead>
               <tr>
-                <th>Producto</th>
-                <th>Artista</th>
-                <th>Género</th>
-                <th>Precio</th>
+                <th>Product</th>
+                <th>Artist</th>
+                <th>Genre</th>
+                <th>Price</th>
                 <th>Rating</th>
                 <th>Stock</th>
-                <th>Estado</th>
-                <th>Acciones</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>

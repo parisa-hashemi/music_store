@@ -10,16 +10,16 @@ const Categorias = ({ onSeleccionarCategoria, onVolver }) => {
     prefetchProductosPorCategoria(categoriaId);
   };
 
-  if (isLoading) return <div className="loading">Cargando categorías...</div>;
+  if (isLoading) return <div className="loading">Loading categories...</div>;
   if (error) return <div className="error">Error: {error.message}</div>;
 
   return (
     <div className="categorias">
       <button onClick={onVolver} className="btn-volver">
-        ← Volver
+        ← Back
       </button>
-      
-      <h1>🏷️ Categorías</h1>
+
+      <h1>🏷️ Categories</h1>
       
       <div className="categorias-grid">
         {categorias?.map(categoria => (

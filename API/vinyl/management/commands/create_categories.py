@@ -2,16 +2,16 @@ from django.core.management.base import BaseCommand
 from vinyl.models import Categoria, Album
 
 class Command(BaseCommand):
-    help = 'Crea categorías y asigna álbumes'
+    help = 'Creates categories and assigns albums'
 
     def handle(self, *args, **options):
-        # Crear categorías
+        # Create categories
         categorias_data = [
-            {'nombre': 'Rock & Metal', 'descripcion': 'Rock, Metal, Punk y géneros relacionados'},
-            {'nombre': 'Pop Internacional', 'descripcion': 'Pop, K-pop, J-pop'},
-            {'nombre': 'Jazz & Blues', 'descripcion': 'Jazz, Blues y música clásica'},
-            {'nombre': 'Música Latina', 'descripcion': 'Salsa, Bachata, Reggaeton, Cumbia'},
-            {'nombre': 'Electrónica', 'descripcion': 'Disco, Electronica, Techno'},
+            {'nombre': 'Rock & Metal', 'descripcion': 'Rock, Metal, Punk and related genres'},
+            {'nombre': 'International Pop', 'descripcion': 'Pop, K-pop, J-pop'},
+            {'nombre': 'Jazz & Blues', 'descripcion': 'Jazz, Blues and classical music'},
+            {'nombre': 'Latin Music', 'descripcion': 'Salsa, Bachata, Reggaeton, Cumbia'},
+            {'nombre': 'Electronic', 'descripcion': 'Disco, Electronic, Techno'},
             {'nombre': 'Hip Hop & Reggae', 'descripcion': 'Hip Hop, Reggae, Trap'},
         ]
         
@@ -25,13 +25,13 @@ class Command(BaseCommand):
                 created_categories += 1
                 self.stdout.write(f"[+] Categoria creada: {categoria.nombre}")
         
-        # Asignar álbumes a categorías
+        # Assign albums to categories
         asignaciones = {
             'Rock & Metal': ['Rock', 'Indie Rock', 'Alternative Rock', 'Metal', 'Punk'],
-            'Pop Internacional': ['Pop', 'K-pop', 'J-pop', 'Indie Pop'],
+            'International Pop': ['Pop', 'K-pop', 'J-pop', 'Indie Pop'],
             'Jazz & Blues': ['Jazz', 'Blues'],
-            'Música Latina': ['Salsa', 'Bachata', 'Reggaeton', 'Cumbia', 'Dembow', 'Bolero'],
-            'Electrónica': ['Disco', 'Electronica', 'Techno'],
+            'Latin Music': ['Salsa', 'Bachata', 'Reggaeton', 'Cumbia', 'Dembow', 'Bolero'],
+            'Electronic': ['Disco', 'Electronic', 'Techno'],
             'Hip Hop & Reggae': ['Hip Hop', 'Reggae', 'Trap'],
         }
         

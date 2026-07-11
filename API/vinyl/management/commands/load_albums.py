@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from vinyl.models import Album
 
 class Command(BaseCommand):
-    help = 'Carga álbumes desde albums.json'
+    help = 'Loads albums from albums.json'
 
     def handle(self, *args, **options):
         # Ruta al archivo JSON
@@ -18,7 +18,7 @@ class Command(BaseCommand):
             updated_count = 0
             
             for album_data in albums_data:
-                # Buscar si el álbum ya existe
+                # Check whether the album already exists
                 album, created = Album.objects.get_or_create(
                     title=album_data['title'],
                     artist=album_data['artist'],

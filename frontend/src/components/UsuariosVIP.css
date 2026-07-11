@@ -1,21 +1,20 @@
 .usuarios-vip {
-  padding: 20px;
+  padding: var(--space-4) 0;
 }
 
 .usuarios-vip h2 {
-  color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .descripcion {
-  color: #666;
-  margin-bottom: 20px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-5);
 }
 
 .sin-usuarios {
   text-align: center;
   padding: 40px;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .tabla-usuarios {
@@ -25,35 +24,36 @@
 .tabla-usuarios table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-soft);
 }
 
 .tabla-usuarios th {
-  background: #f8f9fa;
+  background: var(--color-surface-alt);
   padding: 15px;
   text-align: left;
   font-weight: 600;
-  color: #333;
-  border-bottom: 2px solid #dee2e6;
+  color: var(--color-ink);
+  border-bottom: 2px solid var(--color-border-soft);
 }
 
 .tabla-usuarios td {
   padding: 15px;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--color-border-soft);
 }
 
 .tabla-usuarios tr:hover {
-  background: #f8f9fa;
+  background: var(--color-surface-alt);
 }
 
 .badge-vip {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold-dark) 100%);
+  color: #2a1c08;
   padding: 5px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
 }

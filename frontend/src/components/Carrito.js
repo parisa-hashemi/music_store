@@ -22,12 +22,12 @@ const Carrito = ({ onVolver, onCheckout }) => {
   };
 
   const handleProcesarCompra = () => {
-    if (window.confirm('¿Confirmar compra? Esto reducirá el stock de los productos.')) {
+    if (window.confirm('Confirm purchase? This will reduce the stock of the products.')) {
       procesarCompraMutation.mutate();
     }
   };
 
-  if (isLoading) return <div className="loading">Cargando carrito...</div>;
+  if (isLoading) return <div className="loading">Loading cart...</div>;
   if (error) return <div className="error">Error: {error.message}</div>;
 
   const items = carrito?.items || [];
@@ -36,16 +36,16 @@ const Carrito = ({ onVolver, onCheckout }) => {
   return (
     <div className="carrito">
       <button onClick={onVolver} className="btn-volver">
-        ← Volver
+        ← Back
       </button>
       
-      <h1>🛒 Carrito de Compras</h1>
-      
+      <h1>🛒 Shopping Cart</h1>
+
       {items.length === 0 ? (
         <div className="carrito-vacio">
-          <p>Tu carrito está vacío</p>
+          <p>Your cart is empty</p>
           <button onClick={onVolver} className="btn-seguir-comprando">
-            Seguir Comprando
+            Keep Shopping
           </button>
         </div>
       ) : (
@@ -85,7 +85,7 @@ const Carrito = ({ onVolver, onCheckout }) => {
                     disabled={eliminarDelCarritoMutation.isPending}
                     className="btn-eliminar"
                   >
-                    {eliminarDelCarritoMutation.isPending ? 'Eliminando...' : 'Eliminar'}
+                    {eliminarDelCarritoMutation.isPending ? 'Removing...' : 'Remove'}
                   </button>
                 </div>
                 
@@ -104,18 +104,18 @@ const Carrito = ({ onVolver, onCheckout }) => {
           
           {procesarCompraMutation.isSuccess && (
             <div className="success-message">
-              ¡Compra procesada exitosamente! El stock ha sido actualizado.
+              Purchase processed successfully! Stock has been updated.
             </div>
           )}
-          
+
           <div className="carrito-total">
             <h2>Total: ${total}</h2>
-            <button 
-              className="btn-comprar" 
+            <button
+              className="btn-comprar"
               onClick={onCheckout}
               disabled={items.length === 0}
             >
-              Proceder al Pago
+              Proceed to Payment
             </button>
           </div>
         </div>

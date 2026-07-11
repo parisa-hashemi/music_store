@@ -6,7 +6,7 @@ class TestView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request):
-        return Response({'message': 'API funcionando correctamente'})
-    
+        return Response({'message': 'API working correctly'})
+
     def post(self, request):
-        return Response({'message': 'POST funcionando', 'data': request.data})
+        return Response({'message': 'POST working', 'data': request.data})

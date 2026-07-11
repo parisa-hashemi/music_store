@@ -47,14 +47,14 @@ const Checkout = ({ onVolver, onExito }) => {
   return (
     <div className="checkout-container">
       <button onClick={onVolver} className="btn-volver">
-        ← Volver al Carrito
+        ← Back to Cart
       </button>
-      
+
       <div className="checkout-form">
-        <h1>💳 Procesar Pago</h1>
-        
+        <h1>💳 Process Payment</h1>
+
         <div className="order-summary">
-          <h3>Resumen del Pedido</h3>
+          <h3>Order Summary</h3>
           {carrito?.items?.map(item => (
             <div key={item.id} className="order-item">
               <span>{item.cantidad}x {item.album.title}</span>
@@ -68,8 +68,8 @@ const Checkout = ({ onVolver, onExito }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="payment-section">
-            <h3>Método de Pago</h3>
-            
+            <h3>Payment Method</h3>
+
             <div className="payment-options">
               <label className="payment-option">
                 <input
@@ -79,9 +79,9 @@ const Checkout = ({ onVolver, onExito }) => {
                   checked={paymentMethod === 'card'}
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
-                💳 Tarjeta de Crédito/Débito
+                💳 Credit/Debit Card
               </label>
-              
+
               <label className="payment-option">
                 <input
                   type="radio"
@@ -92,7 +92,7 @@ const Checkout = ({ onVolver, onExito }) => {
                 />
                 🅿️ PayPal
               </label>
-              
+
               <label className="payment-option">
                 <input
                   type="radio"
@@ -104,38 +104,38 @@ const Checkout = ({ onVolver, onExito }) => {
                 🔵 Google Pay
               </label>
             </div>
-            
+
             {paymentMethod === 'card' && (
               <div className="card-form">
-                <input type="text" placeholder="Número de tarjeta" required />
+                <input type="text" placeholder="Card number" required />
                 <div className="card-row">
                   <input type="text" placeholder="MM/YY" required />
                   <input type="text" placeholder="CVV" required />
                 </div>
-                <input type="text" placeholder="Nombre del titular" required />
+                <input type="text" placeholder="Cardholder name" required />
               </div>
             )}
           </div>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className="btn-pay"
             disabled={processing || !carrito?.items?.length}
           >
-            {processing ? 'Procesando...' : `Pagar $${carrito?.total || 0}`}
+            {processing ? 'Processing...' : `Pay $${carrito?.total || 0}`}
           </button>
         </form>
-        
+
         {error && (
           <div className="error-message">
             {error}
           </div>
         )}
-        
+
         <div className="payment-methods">
-          <p>Métodos de pago aceptados:</p>
+          <p>Accepted payment methods:</p>
           <div className="payment-icons">
-            💳 Tarjeta • 🅿️ PayPal • 🔵 Google Pay
+            💳 Card • 🅿️ PayPal • 🔵 Google Pay
           </div>
         </div>
       </div>

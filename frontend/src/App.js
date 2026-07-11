@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import Registro from "./components/Registro";
 import Checkout from "./components/Checkout";
 import HistorialCompras from "./components/HistorialCompras";
+import UserProfile from "./components/UserProfile";
 import { useCarrito } from "./hooks/useCarrito";
 import { getCurrentUser, useLogout, useUserProfile } from "./hooks/useAuth";
 
@@ -24,9 +25,16 @@ const AppContent = () => {
   const { data: userProfile } = useUserProfile();
 
   const mostrarDetalle = (productoId) => {
-    setVistaActual('detalle');
+    console.log("mostrarDetalle called with:", productoId);
+    setVistaActual('detalle');  // ← اصلاح شد: 'detalle' نه 'productDetail'
     setProductoSeleccionado(productoId);
   };
+
+  const mostrarPerfil=() =>
+  {
+    setVistaActual('perfil')
+  }
+
 
   const mostrarCarrito = () => {
     setVistaActual('carrito');
@@ -68,7 +76,7 @@ const AppContent = () => {
 
   const cantidadTotal = carrito?.cantidad_total || 0;
 
-  return (
+   return (
     <div className="App">
       <nav className="navbar">
         <div className="nav-brand" onClick={volverHome}>
@@ -79,14 +87,14 @@ const AppContent = () => {
         <div className="nav-pills">
           {userProfile?.es_staff ? (
             <>
-              <button 
+              <button
                 className={`nav-pill ${vistaActual === 'historial' ? 'active' : ''}`}
                 onClick={mostrarHistorial}
               >
                 <span className="pill-icon">📋</span>
-                Historial
+                History
               </button>
-              <button 
+              <button
                 className={`nav-pill admin-pill ${vistaActual === 'inventario' ? 'active' : ''}`}
                 onClick={mostrarInventario}
               >
@@ -96,44 +104,53 @@ const AppContent = () => {
             </>
           ) : (
             <>
-              <button 
+              <button
                 className={`nav-pill ${vistaActual === 'home' ? 'active' : ''}`}
                 onClick={volverHome}
               >
                 <span className="pill-icon">🏠</span>
-                Inicio
+                Home
               </button>
-              
-              <button 
+
+              <button
                 className={`nav-pill ${vistaActual === 'categorias' ? 'active' : ''}`}
                 onClick={mostrarCategorias}
               >
                 <span className="pill-icon">📂</span>
-                Categorías
+                Categories
               </button>
-              
-              <button 
+
+              <button
                 className={`nav-pill cart-pill ${vistaActual === 'carrito' ? 'active' : ''}`}
                 onClick={mostrarCarrito}
               >
                 <span className="pill-icon">🛒</span>
-                Carrito
+                Cart
                 {cantidadTotal > 0 && <span className="cart-badge">{cantidadTotal}</span>}
               </button>
-              
+
               {usuario && (
-                <button 
-                  className={`nav-pill ${vistaActual === 'historial' ? 'active' : ''}`}
-                  onClick={mostrarHistorial}
-                >
-                  <span className="pill-icon">📋</span>
-                  Historial
-                </button>
+                <>
+                  <button
+                    className={`nav-pill ${vistaActual === 'historial' ? 'active' : ''}`}
+                    onClick={mostrarHistorial}
+                  >
+                    <span className="pill-icon">📋</span>
+                    History
+                  </button>
+                  <button
+                    className={`nav-pill ${vistaActual === 'perfil' ? 'active' : ''}`}
+                    onClick={mostrarPerfil}
+                  >
+                    <span className="pill-icon">👤</span>
+                    Profile
+                  </button>
+                </>
               )}
             </>
           )}
         </div>
-        
+
         <div className="nav-user">
           {usuario ? (
             <div className="user-menu">
@@ -144,13 +161,13 @@ const AppContent = () => {
                 )}
               </div>
               <button className="logout-btn" onClick={handleLogout}>
-                Salir
+                Log Out
               </button>
             </div>
           ) : (
             <button className="login-btn" onClick={mostrarLogin}>
               <span className="pill-icon">🔐</span>
-              Iniciar Sesión
+              Log In
             </button>
           )}
         </div>
@@ -160,7 +177,7 @@ const AppContent = () => {
         {vistaActual === 'home' && (
           <Home onVerDetalle={mostrarDetalle} />
         )}
-        
+
         {vistaActual === 'detalle' && (
           <DetalleProducto 
             productoId={productoSeleccionado}
@@ -210,7 +227,7 @@ const AppContent = () => {
           <Checkout 
             onVolver={mostrarCarrito}
             onExito={() => {
-              alert('¡Compra realizada exitosamente!');
+              alert('Purchase completed successfully!');
               volverHome();
             }}
           />
@@ -218,6 +235,10 @@ const AppContent = () => {
         
         {vistaActual === 'historial' && (
           <HistorialCompras onVolver={volverHome} />
+        )}
+
+        {vistaActual === 'perfil' && (
+          <UserProfile onVolver={volverHome} />
         )}
       </main>
     </div>

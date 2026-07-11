@@ -1,49 +1,44 @@
 .detalle-producto {
-  padding: 20px;
+  padding: var(--space-4) var(--space-5) var(--space-7);
   max-width: 800px;
   margin: 0 auto;
 }
 
-.btn-volver {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  font-size: 16px;
-}
-
-.btn-volver:hover {
-  background-color: #545b62;
-}
-
 .producto-detalle {
-  background: white;
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border-soft);
 }
 
 .producto-detalle h1 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 2.5em;
+  margin-bottom: var(--space-4);
+  font-size: 2.2rem;
+  text-align: center;
+}
+
+.producto-cover-detalle {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin: 0 auto var(--space-5);
+  background: var(--color-bg-alt);
+  box-shadow: var(--shadow-sm);
 }
 
 .producto-info {
-  margin-bottom: 30px;
+  margin-bottom: var(--space-5);
 }
 
 .producto-info p {
-  font-size: 1.1em;
+  font-size: 1.05em;
   margin: 10px 0;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .producto-info strong {
-  color: #333;
+  color: var(--color-ink);
 }
 
 .producto-acciones {
@@ -51,42 +46,29 @@
 }
 
 .btn-agregar-carrito {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
-  transition: background-color 0.2s;
-}
-
-.btn-agregar-carrito:hover:not(:disabled) {
-  background-color: #1e7e34;
-}
-
-.btn-agregar-carrito:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
+  padding: 15px 40px;
+  font-size: 1.05rem;
 }
 
 .precio-detalle {
-  font-size: 1.4em;
-  color: #28a745;
+  font-size: 1.5em;
+  color: var(--color-success-dark);
+  font-family: var(--font-heading);
+  font-weight: 700;
 }
 
 .descuento-detalle {
-  background: #dc3545;
+  background: var(--color-burgundy);
   color: white;
-  padding: 4px 8px;
-  border-radius: 12px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
   font-size: 0.7em;
   margin-left: 10px;
 }
 
 .descuento-detalle.vip {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+  color: #2a1c08;
   animation: pulseVip 2s infinite;
 }
 
@@ -97,41 +79,13 @@
 
 .precio-original {
   text-decoration: line-through;
-  color: #999;
+  color: var(--color-text-muted);
   font-size: 0.8em;
   margin-right: 10px;
 }
 
-.error-message {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 10px;
-  border-radius: 4px;
-  margin-top: 15px;
-  border: 1px solid #f5c6cb;
-}
-
-.success-message {
-  background: #d4edda;
-  color: #155724;
-  padding: 10px;
-  border-radius: 4px;
-  margin-top: 15px;
-  border: 1px solid #c3e6cb;
-}
-
-.loading {
-  text-align: center;
-  padding: 40px;
-  font-size: 1.2em;
-  color: #666;
-}
-
-.error {
-  text-align: center;
-  padding: 40px;
-  font-size: 1.2em;
-  color: #dc3545;
+.rating-wrapper {
+  margin-top: var(--space-5);
 }
 
 /* Responsividad */
@@ -139,19 +93,19 @@
   .detalle-producto {
     padding: 10px;
   }
-  
+
   .producto-detalle {
     padding: 20px;
   }
-  
+
   .producto-detalle h1 {
     font-size: 2em;
   }
-  
+
   .producto-info p {
     font-size: 1em;
   }
-  
+
   .btn-agregar-carrito {
     width: 100%;
     padding: 12px 20px;
@@ -163,7 +117,7 @@
   .producto-detalle h1 {
     font-size: 1.5em;
   }
-  
+
   .btn-volver {
     width: 100%;
     margin-bottom: 15px;

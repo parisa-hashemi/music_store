@@ -20,24 +20,24 @@ const UsuariosVIP = () => {
       });
   }, []);
 
-  if (loading) return <div className="loading">Cargando usuarios VIP...</div>;
+  if (loading) return <div className="loading">Loading VIP users...</div>;
 
   return (
     <div className="usuarios-vip">
-      <h2>✨ Usuarios VIP</h2>
-      <p className="descripcion">Usuarios que han comprado 5 o más álbumes</p>
-      
+      <h2>✨ VIP Users</h2>
+      <p className="descripcion">Users who have purchased 5 or more albums</p>
+
       {usuarios.length === 0 ? (
-        <p className="sin-usuarios">No hay usuarios VIP aún</p>
+        <p className="sin-usuarios">No VIP users yet</p>
       ) : (
         <div className="tabla-usuarios">
           <table>
             <thead>
               <tr>
-                <th>Usuario</th>
+                <th>User</th>
                 <th>Email</th>
-                <th>Total Álbumes</th>
-                <th>Estado</th>
+                <th>Total Albums</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>

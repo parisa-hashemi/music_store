@@ -2,33 +2,33 @@ const API_BASE = 'http://localhost:8000/api';
 
 // Productos
 export const fetchProductos = async (categoriaId = null) => {
-  const url = categoriaId 
+  const url = categoriaId
     ? `${API_BASE}/albums/?categoria=${categoriaId}`
     : `${API_BASE}/albums/`;
   const response = await fetch(url);
-  if (!response.ok) throw new Error('Error al cargar productos');
+  if (!response.ok) throw new Error('Error loading products');
   return response.json();
 };
 
 export const fetchProducto = async (id) => {
   const response = await fetch(`${API_BASE}/albums/${id}/`);
-  if (!response.ok) throw new Error('Error al cargar producto');
+  if (!response.ok) throw new Error('Error loading product');
   return response.json();
 };
 
-// Categorías
+// Categories
 export const fetchCategorias = async () => {
   const response = await fetch(`${API_BASE}/categorias/`);
-  if (!response.ok) throw new Error('Error al cargar categorías');
+  if (!response.ok) throw new Error('Error loading categories');
   return response.json();
 };
 
-// Carrito
+// Cart
 export const fetchCarrito = async () => {
   const response = await fetch(`${API_BASE}/carrito/`, {
     credentials: 'include'
   });
-  if (!response.ok) throw new Error('Error al cargar carrito');
+  if (!response.ok) throw new Error('Error loading cart');
   return response.json();
 };
 
@@ -43,7 +43,7 @@ export const agregarAlCarrito = async ({ album_id, cantidad = 1 }) => {
   });
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || 'Error al agregar al carrito');
+    throw new Error(error.error || 'Error adding to cart');
   }
   return response.json();
 };
@@ -59,7 +59,7 @@ export const actualizarCantidadCarrito = async ({ id, cantidad }) => {
   });
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || 'Error al actualizar cantidad');
+    throw new Error(error.error || 'Error updating quantity');
   }
   return response.json();
 };
@@ -69,7 +69,7 @@ export const eliminarDelCarrito = async (id) => {
     method: 'DELETE',
     credentials: 'include',
   });
-  if (!response.ok) throw new Error('Error al eliminar del carrito');
+  if (!response.ok) throw new Error('Error removing from cart');
   return true;
 };
 
@@ -80,12 +80,12 @@ export const procesarCompra = async () => {
   });
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || 'Error al procesar la compra');
+    throw new Error(error.error || 'Error processing purchase');
   }
   return response.json();
 };
 
-// Autenticación
+// Authentication
 export const registrarUsuario = async (userData) => {
   const response = await fetch(`${API_BASE}/auth/register/`, {
     method: 'POST',
@@ -123,7 +123,7 @@ export const logoutUsuario = async () => {
     method: 'POST',
     credentials: 'include',
   });
-  if (!response.ok) throw new Error('Error al cerrar sesión');
+  if (!response.ok) throw new Error('Error logging out');
   return response.json();
 };
 
@@ -131,7 +131,7 @@ export const fetchHistorialCompras = async () => {
   const response = await fetch(`${API_BASE}/historial/`, {
     credentials: 'include'
   });
-  if (!response.ok) throw new Error('Error al cargar historial');
+  if (!response.ok) throw new Error('Error loading history');
   return response.json();
 };
 
@@ -146,7 +146,7 @@ export const procesarPago = async (stripePaymentId) => {
   });
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || 'Error al procesar el pago');
+    throw new Error(error.error || 'Error processing payment');
   }
   return response.json();
 };

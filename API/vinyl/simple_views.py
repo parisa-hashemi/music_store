@@ -68,22 +68,22 @@ class SimpleCarritoView(APIView):
         try:
             album = Album.objects.get(id=album_id)
         except Album.DoesNotExist:
-            return Response({'error': 'Álbum no encontrado'}, status=404)
-        
+            return Response({'error': 'Album not found'}, status=404)
+
         if cantidad > album.stock:
-            return Response({'error': f'Stock insuficiente. Disponible: {album.stock}'}, status=400)
-        
+            return Response({'error': f'Insufficient stock. Available: {album.stock}'}, status=400)
+
         item, created = CarritoItem.objects.get_or_create(
             session_id=session_id,
             album=album,
             defaults={'cantidad': cantidad}
         )
-        
+
         if not created:
             nueva_cantidad = item.cantidad + cantidad
             if nueva_cantidad > album.stock:
-                return Response({'error': f'Stock insuficiente. Disponible: {album.stock}'}, status=400)
+                return Response({'error': f'Insufficient stock. Available: {album.stock}'}, status=400)
             item.cantidad = nueva_cantidad
             item.save()
-        
-        return Response({'message': 'Producto agregado al carrito'}, status=201)
+
+        return Response({'message': 'Product added to cart'}, status=201)

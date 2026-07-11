@@ -1,8 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ==========================================================================
+   Design tokens — warm vinyl-record palette (cream / near-black / gold)
+   ========================================================================== */
+:root {
+  /* Surfaces */
+  --color-bg: #f6f1e6;
+  --color-bg-alt: #efe6d3;
+  --color-surface: #fffdf9;
+  --color-surface-alt: #faf4e8;
+
+  /* Ink / brand */
+  --color-ink: #211a14;
+  --color-ink-soft: #3a2e23;
+
+  /* Text */
+  --color-text: #2b2118;
+  --color-text-muted: #71624f;
+  --color-text-on-ink: #f7f0e2;
+
+  /* Borders */
+  --color-border: #e5d9c1;
+  --color-border-soft: #efe6d3;
+
+  /* Accent — vinyl gold */
+  --color-gold: #c9982e;
+  --color-gold-dark: #a97b1f;
+  --color-gold-light: #e7c368;
+  --color-gold-bg: #fbf1da;
+
+  /* Secondary accent — burgundy (VIP / highlights) */
+  --color-burgundy: #7c2d3c;
+  --color-burgundy-dark: #5f2130;
+
+  /* Semantic */
+  --color-success: #3f7d54;
+  --color-success-dark: #2f6141;
+  --color-success-bg: #e9f4ec;
+  --color-danger: #b23a2e;
+  --color-danger-dark: #8f2c22;
+  --color-danger-bg: #fbeae8;
+  --color-info: #3d6b8a;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(33, 26, 20, 0.07);
+  --shadow-md: 0 8px 22px rgba(33, 26, 20, 0.10);
+  --shadow-lg: 0 18px 40px rgba(33, 26, 20, 0.16);
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Type */
+  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --transition: 0.2s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -10,4 +89,212 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-ink);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 var(--space-3);
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.6rem; letter-spacing: 0.01em; }
+h3 { font-size: 1.2rem; }
+
+p {
+  line-height: 1.6;
+}
+
+button, input, select, textarea {
+  font-family: var(--font-body);
+}
+
+/* ==========================================================================
+   Shared states — loading / error / empty (used across every page)
+   ========================================================================== */
+.loading,
+.error,
+.profile-loading,
+.comments-loading {
+  text-align: center;
+  padding: var(--space-7) var(--space-4);
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+.error-message {
+  background: var(--color-danger-bg);
+  color: var(--color-danger-dark);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(178, 58, 46, 0.25);
+  margin-top: var(--space-3);
+}
+
+.success-message {
+  background: var(--color-success-bg);
+  color: var(--color-success-dark);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(63, 125, 84, 0.25);
+  margin-top: var(--space-3);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ==========================================================================
+   Shared buttons — every button className in the app is grouped below so the
+   whole site shares one interaction language (fill, radius, hover lift).
+   ========================================================================== */
+button {
+  font-family: var(--font-body);
+}
+
+.btn-carrito,
+.btn-agregar-carrito,
+.btn-comprar,
+.btn-pay,
+.btn-submit,
+.search-btn,
+.edit-btn,
+.save-btn,
+.submit-comment-btn,
+.login-to-comment button,
+.btn-reabastecer {
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+  color: #2a1c08;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 0.85rem 1.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-carrito:hover:not(:disabled),
+.btn-agregar-carrito:hover:not(:disabled),
+.btn-comprar:hover:not(:disabled),
+.btn-pay:hover:not(:disabled),
+.btn-submit:hover:not(:disabled),
+.search-btn:hover:not(:disabled),
+.edit-btn:hover:not(:disabled),
+.save-btn:hover:not(:disabled),
+.submit-comment-btn:hover:not(:disabled),
+.login-to-comment button:hover:not(:disabled),
+.btn-reabastecer:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-carrito:disabled,
+.btn-agregar-carrito:disabled,
+.btn-comprar:disabled,
+.btn-pay:disabled,
+.btn-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-detalle,
+.reset-btn,
+.btn-volver,
+.profile-back-btn,
+.btn-consola,
+.btn-seguir-comprando,
+.cancel-btn {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 0.8rem 1.65rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-detalle:hover:not(:disabled),
+.reset-btn:hover:not(:disabled),
+.btn-volver:hover:not(:disabled),
+.profile-back-btn:hover:not(:disabled),
+.btn-consola:hover:not(:disabled),
+.btn-seguir-comprando:hover:not(:disabled),
+.cancel-btn:hover:not(:disabled) {
+  border-color: var(--color-gold);
+  color: var(--color-gold-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-eliminar {
+  background: var(--color-danger) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: var(--radius-pill) !important;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-eliminar:hover {
+  background: var(--color-danger-dark) !important;
+  transform: translateY(-2px);
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--color-gold-dark);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.btn-link:hover {
+  color: var(--color-burgundy);
+}
+
+/* ==========================================================================
+   Shared cards / surfaces
+   ========================================================================== */
+.producto-card,
+.categoria-card,
+.compra-card,
+.stat-card,
+.checkout-form,
+.producto-detalle,
+.profile-container,
+.auth-form,
+.comment-item,
+.add-comment {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==========================================================================
+   Page section titles (h1) get a consistent underline accent across pages
+   ========================================================================== */
+.home > h1,
+.categorias h1,
+.productos-categoria h1,
+.carrito h1,
+.historial-container h1,
+.checkout-form h1,
+.inventario h1,
+.usuarios-vip h2 {
+  font-family: var(--font-heading);
+  position: relative;
 }

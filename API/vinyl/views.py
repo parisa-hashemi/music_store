@@ -6,10 +6,146 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import login, logout
 from django.db import transaction
+from django.db.models import Q
 
 
 from .models import Album, Categoria, CarritoItem, Compra, CompraItem
 from .serializers import *
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+from .models import Album, Comment
+from .serializers import CommentSerializer
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.db import models
+from .models import Rating
+
+
+
+@api_view(['GET'])
+def user_stats(request):
+    if not request.user.is_authenticated:
+        return Response({'error': 'Not authenticated'}, status=401)
+    
+    compras = Compra.objects.filter(usuario=request.user)
+    total_orders = compras.count()
+    total_spent = sum(compra.total for compra in compras)
+    avg_order = total_spent / total_orders if total_orders > 0 else 0
+    
+    return Response({
+        'total_orders': total_orders,
+        'total_spent': float(total_spent),
+        'avg_order': round(avg_order, 2)
+    })
+
+@api_view(['GET', 'PUT'])
+def user_profile(request):
+    if not request.user.is_authenticated:
+        return Response({'error': 'Not authenticated'}, status=401)
+    
+    if request.method == 'GET':
+        return Response({
+            'username': request.user.username,
+            'email': request.user.email,
+            'es_vip': getattr(request.user, 'vip', False)
+        })
+    
+    elif request.method == 'PUT':
+        data = request.data
+        if 'username' in data:
+            request.user.username = data['username']
+        if 'email' in data:
+            request.user.email = data['email']
+        request.user.save()
+        return Response({
+            'username': request.user.username,
+            'email': request.user.email,
+            'es_vip': getattr(request.user, 'vip', False)
+        })
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def rate_album(request, album_id):
+    try:
+        album = Album.objects.get(id=album_id)
+        score = request.data.get('score')
+
+        try:
+            score = int(score)
+        except (TypeError, ValueError):
+            return Response({'error': 'The score must be an integer between 1 and 5'}, status=400)
+
+        if score < 1 or score > 5:
+            return Response({'error': 'The score must be between 1 and 5'}, status=400)
+
+        rating, created = Rating.objects.update_or_create(
+            user=request.user,
+            album=album,
+            defaults={'score': score}
+        )
+
+
+        avg = album.ratings.aggregate(models.Avg('score'))['score__avg']
+        album.average_rating = avg or 0
+        album.save()
+
+        return Response({
+            'status': 'ok',
+            'average_rating': album.average_rating,
+            'user_rating': score
+        })
+    except Album.DoesNotExist:
+        return Response({'error': 'Album not found'}, status=404)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def album_rating(request, album_id):
+    try:
+        album = Album.objects.get(id=album_id)
+    except Album.DoesNotExist:
+        return Response({'error': 'Album not found'}, status=404)
+
+    user_rating = None
+    if request.user.is_authenticated:
+        existing = Rating.objects.filter(user=request.user, album=album).first()
+        if existing:
+            user_rating = existing.score
+
+    return Response({
+        'average_rating': album.average_rating,
+        'user_rating': user_rating
+    })
+@api_view(['GET'])
+def check_auth(request):
+    if request.user.is_authenticated:
+        return Response({'authenticated': True, 'user': request.user.username})
+    return Response({'authenticated': False}, status=401)
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def album_comments(request, album_id):
+    try:
+        album = Album.objects.get(id=album_id)
+    except Album.DoesNotExist:
+        return Response({'error': 'Album not found'}, status=404)
+    
+    if request.method == 'GET':
+        comments = album.comments.all().order_by('-created_at')
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({'error': 'You must be logged in'}, status=401)
+        
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user, album=album)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 class IndexView(APIView):
     def get(self, request):
@@ -28,13 +164,45 @@ class AlbumView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request):
+        queryset = Album.objects.all()
+        
+        # ========== فیلتر بر اساس دسته‌بندی (قبلاً داشت) ==========
         categoria_id = request.query_params.get('categoria')
         if categoria_id:
-            albums = Album.objects.filter(categoria_id=categoria_id)
-        else:
-            albums = Album.objects.all()
+            queryset = queryset.filter(categoria_id=categoria_id)
+        
+        # ========== جستجوی پیشرفته (جدید) ==========
+        search = request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) | 
+                Q(artist__icontains=search)
+            )
+        
+        # ========== فیلتر بر اساس ژانر (جدید) ==========
+        genre = request.query_params.get('genre')
+        if genre and genre != '':
+            queryset = queryset.filter(genre__iexact=genre)
+        
+        # ========== فیلتر بر اساس قیمت (جدید) ==========
+        min_price = request.query_params.get('min_price')
+        if min_price:
+            try:
+                min_price = float(min_price)
+                queryset = queryset.filter(precio__gte=min_price)
+            except ValueError:
+                pass
+        
+        max_price = request.query_params.get('max_price')
+        if max_price:
+            try:
+                max_price = float(max_price)
+                queryset = queryset.filter(precio__lte=max_price)
+            except ValueError:
+                pass
+        # ==============================================
 
-        serializer = AlbumSerializer(albums, many=True)
+        serializer = AlbumSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -49,6 +217,7 @@ class AlbumView(APIView):
         serializer.save()
 
         return Response(serializer.data, status=201)
+    
 
     
 class AlbumDetailView(APIView):
@@ -129,10 +298,10 @@ class CarritoView(APIView):
         try:
             album = Album.objects.get(id=album_id)
         except Album.DoesNotExist:
-            return Response({'error': 'Álbum no encontrado'}, status=404)
+            return Response({'error': 'Album not found'}, status=404)
 
         if cantidad > album.stock:
-            return Response({'error': f'Stock insuficiente. Disponible: {album.stock}'}, status=400)
+            return Response({'error': f'Insufficient stock. Available: {album.stock}'}, status=400)
 
         with transaction.atomic():
             item, created = CarritoItem.objects.get_or_create(
@@ -140,11 +309,11 @@ class CarritoView(APIView):
                 album=album,
                 defaults={'cantidad': cantidad}
             )
-            
+
             if not created:
                 nueva_cantidad = item.cantidad + cantidad
                 if nueva_cantidad > album.stock:
-                    return Response({'error': f'Stock insuficiente. Disponible: {album.stock}'}, status=400)
+                    return Response({'error': f'Insufficient stock. Available: {album.stock}'}, status=400)
                 item.cantidad = nueva_cantidad
                 item.save()
 
@@ -180,14 +349,14 @@ class CarritoView(APIView):
                     total += item.cantidad * precio
                 else:
                     return Response(
-                        {'error': f'Stock insuficiente para {album.title}'}, 
+                        {'error': f'Insufficient stock for {album.title}'},
                         status=400
                     )
-            
+
             items.delete()
-        
+
         return Response({
-            'message': 'Compra procesada exitosamente',
+            'message': 'Purchase processed successfully',
             'total': float(total)
         }, status=200)
 
@@ -206,14 +375,14 @@ class CarritoItemView(APIView):
         try:
             item = CarritoItem.objects.get(id=pk, session_id=session_id)
         except CarritoItem.DoesNotExist:
-            return Response({'error': 'Item no encontrado'}, status=404)
+            return Response({'error': 'Item not found'}, status=404)
 
         nueva_cantidad = request.data.get('cantidad')
         if nueva_cantidad <= 0:
-            return Response({'error': 'La cantidad debe ser mayor a 0'}, status=400)
-        
+            return Response({'error': 'Quantity must be greater than 0'}, status=400)
+
         if nueva_cantidad > item.album.stock:
-            return Response({'error': f'Stock insuficiente. Disponible: {item.album.stock}'}, status=400)
+            return Response({'error': f'Insufficient stock. Available: {item.album.stock}'}, status=400)
 
         item.cantidad = nueva_cantidad
         item.save()
@@ -228,4 +397,4 @@ class CarritoItemView(APIView):
             item.delete()
             return Response(status=204)
         except CarritoItem.DoesNotExist:
-            return Response({'error': 'Item no encontrado'}, status=404)
+            return Response({'error': 'Item not found'}, status=404)

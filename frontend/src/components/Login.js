@@ -29,15 +29,15 @@ const Login = ({ onVolver, onCambiarARegistro }) => {
   return (
     <div className="auth-container">
       <button onClick={onVolver} className="btn-volver">
-        ← Volver
+        ← Back
       </button>
-      
+
       <div className="auth-form">
-        <h1>🔐 Iniciar Sesión</h1>
-        
+        <h1>🔐 Log In</h1>
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Usuario:</label>
+            <label>Username:</label>
             <input
               type="text"
               name="username"
@@ -46,9 +46,9 @@ const Login = ({ onVolver, onCambiarARegistro }) => {
               required
             />
           </div>
-          
+
           <div className="form-group">
-            <label>Contraseña:</label>
+            <label>Password:</label>
             <input
               type="password"
               name="password"
@@ -57,26 +57,26 @@ const Login = ({ onVolver, onCambiarARegistro }) => {
               required
             />
           </div>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className="btn-submit"
             disabled={loginMutation.isPending}
           >
-            {loginMutation.isPending ? 'Iniciando...' : 'Iniciar Sesión'}
+            {loginMutation.isPending ? 'Logging in...' : 'Log In'}
           </button>
         </form>
-        
+
         {loginMutation.error && (
           <div className="error-message">
             {loginMutation.error.message}
           </div>
         )}
-        
+
         <div className="auth-switch">
-          <p>¿No tienes cuenta? 
+          <p>Don't have an account?
             <button onClick={onCambiarARegistro} className="btn-link">
-              Regístrate aquí
+              Sign up here
             </button>
           </p>
         </div>

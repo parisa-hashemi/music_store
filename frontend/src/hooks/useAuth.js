@@ -38,7 +38,7 @@ export const useLogout = () => {
     onSuccess: () => {
       // Limpiar localStorage
       localStorage.removeItem('user');
-      // Limpiar carrito específicamente
+      // Clear the cart specifically
       queryClient.setQueryData(['carrito'], {
         items: [],
         total: 0,
@@ -46,7 +46,7 @@ export const useLogout = () => {
       });
       // Limpiar todas las queries
       queryClient.clear();
-      // Recargar página para resetear estado
+      // Reload the page to reset state
       window.location.reload();
     },
   });
@@ -76,7 +76,7 @@ export const useUserProfile = () => {
       const response = await fetch('http://localhost:8000/api/user/profile/', {
         credentials: 'include',
       });
-      if (!response.ok) throw new Error('Error al obtener perfil');
+      if (!response.ok) throw new Error('Error fetching profile');
       return response.json();
     },
     enabled: !!getCurrentUser(),

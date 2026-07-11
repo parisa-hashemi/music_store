@@ -17,14 +17,14 @@ class UserRegistrationView(APIView):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            # Crear Usuario personalizado también
+            # Also create the custom Usuario
             from .models import Usuario
             Usuario.objects.create(
                 username=user.username,
                 email=user.email,
                 password=user.password
             )
-            return Response({'message': 'Usuario creado exitosamente', 'user_id': user.id}, status=201)
+            return Response({'message': 'User created successfully', 'user_id': user.id}, status=201)
         return Response(serializer.errors, status=400)
 
 class UserLoginView(APIView):
@@ -35,15 +35,15 @@ class UserLoginView(APIView):
         password = request.data.get('password')
         
         if not username or not password:
-            return Response({'error': 'Username y password requeridos'}, status=400)
-        
+            return Response({'error': 'Username and password are required'}, status=400)
+
         from django.contrib.auth import authenticate
         user = authenticate(username=username, password=password)
-        
+
         if user:
             login(request, user)
             return Response({
-                'message': 'Login exitoso',
+                'message': 'Login successful',
                 'user': {
                     'id': user.id,
                     'username': user.username,
@@ -51,19 +51,19 @@ class UserLoginView(APIView):
                 }
             })
         else:
-            return Response({'error': 'Credenciales inválidas'}, status=400)
+            return Response({'error': 'Invalid credentials'}, status=400)
 
 class UserLogoutView(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
         if request.user.is_authenticated:
-            # Limpiar carrito antes del logout
+            # Clear cart before logout
             session_id = request.session.session_key
             if session_id:
                 CarritoItem.objects.filter(session_id=session_id).delete()
             logout(request)
-        return Response({'message': 'Logout exitoso'})
+        return Response({'message': 'Logout successful'})
 
 class HistorialComprasView(APIView):
     permission_classes = [IsAuthenticated]
@@ -86,11 +86,11 @@ class CheckoutView(APIView):
         
         session_id = request.session.session_key
         if not session_id:
-            return Response({'error': 'No hay carrito activo'}, status=400)
-        
+            return Response({'error': 'No active cart'}, status=400)
+
         items = CarritoItem.objects.filter(session_id=session_id)
         if not items.exists():
-            return Response({'error': 'Carrito vacío'}, status=400)
+            return Response({'error': 'Cart is empty'}, status=400)
         
         es_vip = False
         try:
@@ -138,14 +138,14 @@ class CheckoutView(APIView):
                     album.save()
                 else:
                     return Response(
-                        {'error': f'Stock insuficiente para {album.title}'}, 
+                        {'error': f'Insufficient stock for {album.title}'},
                         status=400
                     )
-            
+
             items.delete()
-        
+
         return Response({
-            'message': 'Compra procesada exitosamente',
+            'message': 'Purchase processed successfully',
             'compra_id': compra.id
         }, status=201)
 
@@ -161,7 +161,7 @@ class UsuariosVIPView(APIView):
     
     def get(self, request):
         if not request.user.is_staff:
-            return Response({'error': 'No autorizado'}, status=403)
+            return Response({'error': 'Not authorized'}, status=403)
         
         usuarios_vip = Usuario.objects.filter(VIP=True)
         data = []

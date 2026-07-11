@@ -1,6 +1,7 @@
 # vinyl/urls.py
 from django.urls import path
-from . import views
+from . import views 
+from .views import album_comments 
 from . import auth_views
 from . import test_views
 from . import simple_views
@@ -25,4 +26,11 @@ urlpatterns = [
     path('usuarios-vip/', auth_views.UsuariosVIPView.as_view(), name='usuarios-vip'),
     path('checkout/', auth_views.CheckoutView.as_view(), name='checkout'),
     path('test/', test_views.TestView.as_view(), name='test'),
+    path('albums/<int:album_id>/comments/', album_comments, name='album-comments'),
+    path('auth/check/', views.check_auth, name='check-auth'),
+    path('albums/<int:album_id>/rate/', views.rate_album, name='rate-album'),
+    path('albums/<int:album_id>/rating/', views.album_rating, name='album-rating'),
+    path('user/stats/', views.user_stats, name='user-stats'),
+    path('user/profile/', views.user_profile, name='user-profile'),
+
 ] 

@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://127.0.0.1:8000/api/albums/ --max-time 5 -w \"\\\\nHTTP_CODE:%{http_code}\\\\n\")",
+      "WebSearch",
+      "Bash(curl -s -G https://commons.wikimedia.org/w/api.php --data-urlencode action=query --data-urlencode generator=categorymembers --data-urlencode 'gcmtitle=Category:Audio files of music' --data-urlencode gcmtype=file --data-urlencode gcmlimit=100 --data-urlencode 'gcmcontinue=file|4131204531205245494e20474c454943485354204d495454454c542e4f4747|15790158' --data-urlencode prop=imageinfo --data-urlencode 'iiprop=url|mediatype|size' --data-urlencode format=json --max-time 20 -o /c/Users/user/AppData/Local/Temp/claude/c--Users-user-Projects-ECommerce--2-/6f757c2e-2502-484a-9ff1-8249f2722df6/scratchpad/c2.json)",
+      "Read(//c/Users/user/AppData/Local/Temp/claude/c--Users-user-Projects-ECommerce--2-/6f757c2e-2502-484a-9ff1-8249f2722df6/scratchpad/**)",
+      "Bash(curl -s -o /dev/null -w \"HTTP:%{http_code}\\\\n\" http://localhost:3000/ --max-time 5)",
+      "Bash(CI=true timeout 90 npx react-scripts build)",
+      "Bash(npm -v)",
+      "Read(//c/Program Files/nodejs/**)",
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/**)",
+      "Read(//c/Users/user/AppData/**)",
+      "Bash(sleep 8; cat /tmp/frontend_dev.log 2>&1 | tail -60)",
+      "Bash(python3 -c ' *)",
+      "Bash(where python *)",
+      "Read(//c/Users/user/AppData/Local/Programs/Python/Python312//**)",
+      "Bash(/c/Users/user/AppData/Local/Programs/Python/Python312/python.exe -c ' *)",
+      "Bash(export PYTHONIOENCODING=utf-8)",
+      "Read(//tmp/**)",
+      "Bash(\"/c/Users/user/AppData/Local/Programs/Python/Python312/python.exe\" -m py_compile vinyl/management/commands/create_categories.py vinyl/management/commands/seed_demo.py)",
+      "Bash(cd \"/c/Users/user/Projects/ECommerce \\(2\\)/API\")",
+      "Bash(cat /tmp/rating_check.txt)",
+      "Bash(\"/c/Users/user/AppData/Local/Programs/Python/Python312/python.exe\" manage.py seed_demo)",
+      "Bash(curl -s -m 5 http://localhost:8000/api/albums/33/rating/)",
+      "Bash(curl -s -m 5 http://localhost:8000/api/albums/33/)"
+    ]
+  }
+}

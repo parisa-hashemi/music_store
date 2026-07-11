@@ -34,7 +34,7 @@ class CarritoAlbumView(APIView):
             serializer = CarritoItemSerializer(item)
             return Response(serializer.data)
         except Album.DoesNotExist:
-            return Response({'error': 'Album no encontrado'}, status=404)
+            return Response({'error': 'Album not found'}, status=404)
 
     def delete(self, request, album_id):
         session_id = self.get_session_id(request)
@@ -44,4 +44,4 @@ class CarritoAlbumView(APIView):
             album__id=album_id
         ).delete()[0]
         
-        return Response({'message': f'{deleted_count} items eliminados'}, status=200)
+        return Response({'message': f'{deleted_count} items removed'}, status=200)

@@ -23,7 +23,7 @@ const Registro = ({ onVolver, onCambiarALogin }) => {
     e.preventDefault();
     registroMutation.mutate(formData, {
       onSuccess: () => {
-        alert('Usuario registrado exitosamente. Ahora puedes iniciar sesión.');
+        alert('User registered successfully. You can now log in.');
         onCambiarALogin();
       }
     });
@@ -32,15 +32,15 @@ const Registro = ({ onVolver, onCambiarALogin }) => {
   return (
     <div className="auth-container">
       <button onClick={onVolver} className="btn-volver">
-        ← Volver
+        ← Back
       </button>
-      
+
       <div className="auth-form">
-        <h1>📝 Crear Cuenta</h1>
-        
+        <h1>📝 Create Account</h1>
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Usuario:</label>
+            <label>Username:</label>
             <input
               type="text"
               name="username"
@@ -49,7 +49,7 @@ const Registro = ({ onVolver, onCambiarALogin }) => {
               required
             />
           </div>
-          
+
           <div className="form-group">
             <label>Email:</label>
             <input
@@ -60,9 +60,9 @@ const Registro = ({ onVolver, onCambiarALogin }) => {
               required
             />
           </div>
-          
+
           <div className="form-group">
-            <label>Contraseña:</label>
+            <label>Password:</label>
             <input
               type="password"
               name="password"
@@ -72,9 +72,9 @@ const Registro = ({ onVolver, onCambiarALogin }) => {
               minLength="6"
             />
           </div>
-          
+
           <div className="form-group">
-            <label>Confirmar Contraseña:</label>
+            <label>Confirm Password:</label>
             <input
               type="password"
               name="password_confirm"
@@ -83,26 +83,26 @@ const Registro = ({ onVolver, onCambiarALogin }) => {
               required
             />
           </div>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className="btn-submit"
             disabled={registroMutation.isPending}
           >
-            {registroMutation.isPending ? 'Registrando...' : 'Crear Cuenta'}
+            {registroMutation.isPending ? 'Registering...' : 'Create Account'}
           </button>
         </form>
-        
+
         {registroMutation.error && (
           <div className="error-message">
             {registroMutation.error.message}
           </div>
         )}
-        
+
         <div className="auth-switch">
-          <p>¿Ya tienes cuenta? 
+          <p>Already have an account?
             <button onClick={onCambiarALogin} className="btn-link">
-              Inicia sesión aquí
+              Log in here
             </button>
           </p>
         </div>

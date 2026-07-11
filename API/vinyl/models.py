@@ -7,7 +7,7 @@ class Usuario(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
     image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
-    VIP = models.BooleanField(default=False) # Si compra más de 5 álbumes, se vuelve VIP
+    VIP = models.BooleanField(default=False) # Becomes VIP after purchasing 5+ albums
 
     def actualizar_estado_vip(self):
         from django.contrib.auth.models import User
@@ -37,17 +37,17 @@ class Album(models.Model):
     METAL = 'Metal'
     PUNK = 'Punk'
 
-# --- Pop y derivados ---
+    # --- Pop y derivados ---
     POP = 'Pop'
     JPOP = 'J-pop'
     KPOP = 'K-pop'
 
-# --- Jazz / Blues / Soul ---
+    # --- Jazz / Blues / Soul ---
     JAZZ = 'Jazz'
     BLUES = 'Blues'
     DISCO = 'Disco'
 
-# --- Música Latina ---
+    # --- Latin Music ---
     SALSA = 'Salsa'
     BACHATA = 'Bachata'
     REGGAETON = 'Reggaeton'
@@ -55,11 +55,11 @@ class Album(models.Model):
     DEMBOW = 'Dembow'
     BOLERO = 'Bolero'
 
-# --- Electrónica ---
-    ELECTRONICA = 'Electronica'
+    # --- Electronic ---
+    ELECTRONICA = 'Electronic'
     TECHNO = 'Techno'
 
-# --- Hip Hop / Reggae ---
+    # --- Hip Hop / Reggae ---
     HIP_HOP = 'Hip Hop'
     REGGAE = 'Reggae'
     TRAP = 'Trap'
@@ -84,7 +84,7 @@ class Album(models.Model):
         (BLUES, 'Blues'),
         (DISCO, 'Disco'),
 
-        # --- Música Latina ---
+        # --- Latin Music ---
         (SALSA, 'Salsa'),
         (BACHATA, 'Bachata'),
         (REGGAETON, 'Reggaeton'),
@@ -92,14 +92,16 @@ class Album(models.Model):
         (DEMBOW, 'Dembow'),
         (BOLERO, 'Bolero'),
 
-        # --- Electrónica ---
-        (ELECTRONICA, 'Electronica'),
+        # --- Electronic ---
+        (ELECTRONICA, 'Electronic'),
         (TECHNO, 'Techno'),
 
         # --- Hip Hop / Reggae ---
         (HIP_HOP, 'Hip Hop'),
         (REGGAE, 'Reggae'),
         (TRAP, 'Trap'),
+
+    
     ]
     
     BESTSELLER = models.BooleanField(default=False)
@@ -112,6 +114,14 @@ class Album(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     image = models.ImageField(upload_to='album_images/', null=True, blank=True)
     categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True, blank=True)
+
+    
+  
+    tracks = models.JSONField(default=list, blank=True, verbose_name="لیست ترک‌ها")
+    average_rating = models.FloatField(default=0, verbose_name="میانگین امتیاز")
+    preview_url = models.URLField(max_length=500, blank=True, null=True, verbose_name="پیش‌پخش صوتی")
+    cover_image = models.URLField(max_length=500, blank=True, null=True, verbose_name="عکس کاور")
+
 
     def __str__(self):
         return f"{self.title} by {self.artist}"
@@ -135,6 +145,20 @@ class CarritoItem(models.Model):
     def __str__(self):
         return f"{self.cantidad}x {self.album.title}"
 
+class Comment(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="کاربر")
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='comments', verbose_name="آلبوم")
+    body = models.TextField(verbose_name="متن نظر")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
+    
+    class Meta:
+        ordering = ['-created_at']  # آخرین نظرات اول نمایش داده شوند
+        verbose_name = "نظر"
+        verbose_name_plural = "نظرات"
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.album.title}"
+
 class Compra(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
@@ -152,8 +176,18 @@ class CompraItem(models.Model):
     
     def __str__(self):
         return f"{self.cantidad}x {self.album.title}"
-
-# Signal para actualizar VIP automáticamente
+class Rating(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='ratings')
+    score = models.IntegerField(choices=[(i, i) for i in range(1, 6)], verbose_name="امتیاز")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user', 'album')  # هر کاربر فقط یک بار امتیاز بده
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.album.title}: {self.score}"
+# Signal to automatically update VIP status
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
